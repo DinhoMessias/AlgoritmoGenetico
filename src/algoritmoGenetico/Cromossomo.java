@@ -1,7 +1,5 @@
 package algoritmoGenetico;
 
-import java.util.Arrays;
-
 public class Cromossomo {
 
 	private int[] pontos;
@@ -13,6 +11,10 @@ public class Cromossomo {
 		this.fitness = fitness;
 	}
 
+	public Cromossomo(int numPontos) {
+		this.pontos = new int[numPontos];
+	}
+
 	public Cromossomo() {
 	}
 
@@ -22,6 +24,10 @@ public class Cromossomo {
 
 	public void setPontos(int[] pontos) {
 		this.pontos = pontos;
+	}
+
+	public int getPonto(int index) {
+		return this.pontos[index];
 	}
 
 	public double getFitness() {

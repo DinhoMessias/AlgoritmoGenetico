@@ -2,9 +2,7 @@ package algoritmoGenetico;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Random;
 
 public class Util {
 
@@ -52,6 +50,17 @@ public class Util {
 			vet[i] = (int) (Math.random() * numPontos);
 		}
 		return vet;
+	}
+
+	public static void gerarPopulacao(int numPopulacao, int numFacilidade, int[][] pontos, Populacao p1) {
+		for (int i = 0; i <= numPopulacao; i++) {
+			int[] solucaoAleatoria = gerarSolucao(numFacilidade, pontos.length);
+			int[] tetzAndBart = tetzBart(solucaoAleatoria, pontos.length, pontos);
+			double y = Util.avaliacao(pontos, tetzAndBart);
+			Cromossomo c1 = new Cromossomo(tetzAndBart, y);
+			p1.addSolucao(c1);
+			System.out.println(c1.toString());
+		}
 	}
 
 	public static double calcularDistancia(int[][] pontos, int pt1, int pt2) {
@@ -116,7 +125,7 @@ public class Util {
 		Populacao pais = new Populacao();
 		double sumFit = 0;
 		int numSelecionado = 0;
-		
+
 		// calculando fitness total para distribuir as porcentagens de aptidao
 		for (Cromossomo c1 : p1.getPop()) {
 			sumFit += c1.getFitness();
@@ -141,5 +150,35 @@ public class Util {
 			}
 		}
 		return pais;
+	}
+
+	public static Cromossomo cruzamentoMascara(Populacao pais, int[][] pontos) {
+		Cromossomo filho01 = new Cromossomo(pais.getPop().get(0).getPontos().length);
+		Cromossomo filho02 = new Cromossomo(pais.getPop().get(0).getPontos().length);
+		Random gerador = new Random();
+		int mascara;
+
+		for (int i = 0; i < filho01.getPontos().length; i++) {
+			mascara = gerador.nextInt(2);
+			if (mascara == 0) {
+				filho01.getPontos()[i] = pais.getPop().get(0).getPonto(i);
+				filho02.getPontos()[i] = pais.getPop().get(1).getPonto(i);
+			} else {
+				filho01.getPontos()[i] = pais.getPop().get(1).getPonto(i);
+				filho02.getPontos()[i] = pais.getPop().get(0).getPonto(i);
+			}
+		}
+
+		filho01.setFitness(avaliacao(pontos, filho01.getPontos()));
+		filho02.setFitness(avaliacao(pontos, filho02.getPontos()));
+
+		System.out.println("Filho 01: " + filho01.toString());
+		System.out.println("Filho 02: " + filho02.toString());
+
+		if (filho01.getFitness() < filho02.getFitness()) {
+			return filho01;
+		} else {
+			return filho02;
+		}
 	}
 }
