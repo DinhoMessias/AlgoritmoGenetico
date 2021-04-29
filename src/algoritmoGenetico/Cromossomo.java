@@ -48,7 +48,7 @@ public class Cromossomo {
 	}
 
 	public void calcAptidao(double fitTotal) {
-		this.aptidao = (fitness * 100) / fitTotal;
+		this.aptidao = (this.fitness * 100) / fitTotal;
 	}
 
 	public static String exibeVet(int[] vet) {
